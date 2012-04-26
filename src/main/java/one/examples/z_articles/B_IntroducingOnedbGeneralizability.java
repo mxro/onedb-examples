@@ -14,7 +14,7 @@ public class B_IntroducingOnedbGeneralizability {
     };
 
     public static void main(String[] args) {
-        OneJre.init("[your API key here]");
+        OneJre.init("2subu0yya9xrfb5yspymubfh0ji2");
 
         One.createRealm("nodes").and(new When.RealmCreated() {
 
