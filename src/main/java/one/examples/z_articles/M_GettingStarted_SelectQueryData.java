@@ -19,6 +19,7 @@ public class M_GettingStarted_SelectQueryData {
 
         // replace reference and secret with details of the realm you have
         // created!!!
+        // also replace customer type node!!
         One.load(One.reference("[link to your created realm here]"))
                 .withSecret("[your realm secret here]").and(new When.Loaded() {
 

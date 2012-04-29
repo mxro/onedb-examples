@@ -10,6 +10,8 @@ import one.core.nodes.OneNode;
 public class L_GettingStarted_SelectCreateData {
 
     public static void main(String[] args) {
+        // remember to replace api and references to nodes!!!
+        
         OneJre.init("[Your API Key Here]");
 
         One.createRealm("query").and(new When.RealmCreated() {
