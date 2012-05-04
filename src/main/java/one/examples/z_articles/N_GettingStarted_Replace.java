@@ -7,7 +7,7 @@ import one.core.dsl.callbacks.ShutdownCallback;
 import one.core.dsl.callbacks.When;
 import one.core.nodes.OneNode;
 
-public class N_GettingStarted_Update {
+public class N_GettingStarted_Replace {
 
     /**
      * @param args
