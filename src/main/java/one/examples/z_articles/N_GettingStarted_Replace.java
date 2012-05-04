@@ -14,6 +14,7 @@ public class N_GettingStarted_Replace {
      */
     public static void main(String[] args) {
         OneJre.init("[Your API Key here]");
+        // OR OneTestJre.init();
 
         One.createRealm("update").and(new When.RealmCreated() {
 
