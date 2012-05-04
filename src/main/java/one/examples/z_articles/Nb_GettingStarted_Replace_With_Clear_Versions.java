@@ -14,7 +14,8 @@ public class Nb_GettingStarted_Replace_With_Clear_Versions {
      * @param args
      */
     public static void main(String[] args) {
-        OneJre.init("v15hyv30dhoz0zz8z19dspsyyetmfrpj");
+        OneJre.init("[Your API key here]");
+        
         One.createRealm("replaceAndClear").and(new When.RealmCreated() {
 
             @Override
