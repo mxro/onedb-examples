@@ -48,7 +48,7 @@ public class Nb_GettingStarted_Replace_With_Clear_Versions {
                                     
                                     @Override
                                     public void onSuccessfullyShutdown() {
-                                        System.out.println("Client closed");
+                                        System.out.println("Client closed for "+realmRoot+":"+secret );
                                     }
                                 });
                             }
