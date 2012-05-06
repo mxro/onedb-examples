@@ -22,12 +22,12 @@ public class K_GettingStarted_CustomerDefinition {
 
                 // -- reference types
                 Object addressType = One
-                        .reference("https://u1.linnk.it/6fop02/types/address"); // <--
+                        .reference("https://u1.linnk.it/zednuw/types/address"); // <--
                                                                                 // replace
                                                                                 // with
                                                                                 // yours!
                 Object customerType = One
-                        .reference("https://u1.linnk.it/6fop02/types/customer"); // <--
+                        .reference("https://u1.linnk.it/zednuw/types/customer"); // <--
                                                                                  // replace
                                                                                  // with
                                                                                  // yours!

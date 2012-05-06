@@ -37,7 +37,7 @@ public class N_GettingStarted_Replace {
                 One.replace(phase1Node)
                         .with(One.newNode("phase2").at(phase1Node.getId()))
                         .in(client);
-
+                
                 for (String childId : One.selectFrom(realmRoot).allChildren()
                         .in(client)) {
                     System.out.println(One.dereference(One.reference(childId))

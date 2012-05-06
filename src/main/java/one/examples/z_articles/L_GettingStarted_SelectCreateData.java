@@ -26,7 +26,8 @@ public class L_GettingStarted_SelectCreateData {
                         .in(client);
                  
                 One.append(
-                        One.reference("[your customer type here]"))
+                        One.reference("https://u1.linnk.it/zednuw/types/customer"))
+                                       // ^-- replace with your customer type
                         .to(bob).in(client);
 
                 One.shutdown(client).and(new ShutdownCallback() {

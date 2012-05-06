@@ -20,7 +20,8 @@ public class M_GettingStarted_SelectQueryData {
         // replace reference and secret with details of the realm you have
         // created!!!
         // also replace customer type node!!
-        One.load(One.reference("[link to your created realm here]"))
+        One.load(One.reference("https://u1.linnk.it/4hxdr8/query"))
+                                  // ^-- replace with your created realm
                 .withSecret("[your realm secret here]").and(new When.Loaded() {
 
                     @Override
@@ -54,7 +55,8 @@ public class M_GettingStarted_SelectQueryData {
                         One.selectFrom(realmRoot)
                                 .theChildren()
                                 .linkingTo(
-                                        One.reference("[link to your customer type here]"))
+                                        One.reference("https://u1.linnk.it/zednuw/types/customer"))
+                                                         // ^-- replace with your customer type 
                                 .in(client)
                                 .and(new When.ChildrenSelected<OneTypedReference<Object>>() {
 
