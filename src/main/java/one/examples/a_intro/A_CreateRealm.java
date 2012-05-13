@@ -5,8 +5,7 @@ import one.common.One;
 import one.core.domain.OneClient;
 import one.core.dsl.callbacks.ShutdownCallback;
 import one.core.dsl.callbacks.When;
-import one.core.dsl.callbacks.When.RealmCreated;
-import one.core.nodes.OneNode;
+import one.core.dsl.callbacks.results.WithRealmCreatedResult;
 
 public class A_CreateRealm {
 
@@ -16,15 +15,16 @@ public class A_CreateRealm {
 
 		One.createRealm("foo").and(new When.RealmCreated() {
 
-			@Override
-			public void thenDo(OneClient client, OneNode rootNode, String secret,
-					String partnerSecret) {
-				System.out.println("Realm has been created.\n");
-				System.out.println("Realm root: " + rootNode);
-				System.out.println("Realm secret: " + secret);
-				
-				shutdown(client);
-			}
+		    @Override
+            public void thenDo(WithRealmCreatedResult cr) {
+		        System.out.println("Realm has been created.\n");
+                System.out.println("Realm root: " + cr.root());
+                System.out.println("Realm secret: " + cr.secret());
+                
+                shutdown(cr.client());
+            }
+		    
+			
 
 			private void shutdown(OneClient arg0) {
 				One.shutdown(arg0).and(new ShutdownCallback() {
@@ -40,6 +40,8 @@ public class A_CreateRealm {
 					}
 				});
 			}
+
+           
 
 		});
 

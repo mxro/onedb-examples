@@ -5,6 +5,7 @@ import one.common.One;
 import one.core.domain.OneClient;
 import one.core.dsl.callbacks.ShutdownCallback;
 import one.core.dsl.callbacks.WhenRealmCreated;
+import one.core.dsl.callbacks.results.WithRealmCreatedResult;
 import one.core.nodes.OneNode;
 
 public class O_GettingStarted_Remove {
@@ -16,9 +17,10 @@ public class O_GettingStarted_Remove {
         One.createRealm("remove").and(new WhenRealmCreated() {
 
             @Override
-            public void thenDo(final OneClient client, final OneNode realmRoot,
-                    final String secret, final String partnerSecret) {
-
+            public void thenDo(final WithRealmCreatedResult r) {
+                OneClient client = r.client();
+                OneNode realmRoot = r.root();
+                
                 // remove connection AND node
                 OneNode toBeRemovedNode = One.append("to be removed")
                         .to(realmRoot).atAddress("./toBeRemoved").in(client);
@@ -39,11 +41,10 @@ public class O_GettingStarted_Remove {
 
                     @Override
                     public void onSuccessfullyShutdown() {
-                        System.out.println("all uploaded for " + realmRoot
-                                + ":" + secret);
+                        System.out.println("all uploaded for " + r.root()
+                                + ":" + r.secret());
                     }
                 });
-
             }
         });
     }

@@ -2,10 +2,9 @@ package one.examples.z_articles;
 
 import one.client.jre.OneJre;
 import one.common.One;
-import one.core.domain.OneClient;
 import one.core.dsl.callbacks.ShutdownCallback;
 import one.core.dsl.callbacks.When;
-import one.core.nodes.OneNode;
+import one.core.dsl.callbacks.results.WithRealmCreatedResult;
 
 public class L_GettingStarted_SelectCreateData {
 
@@ -15,22 +14,21 @@ public class L_GettingStarted_SelectCreateData {
         OneJre.init("[Your API Key Here]");
 
         One.createRealm("query").and(new When.RealmCreated() {
+            
             @Override
-            public void thenDo(OneClient client, OneNode realmRoot,
-                    String realmSecret, String partnerSecret) {
+            public void thenDo(WithRealmCreatedResult r) {
+                System.out.println("Created " + r.root() + ":" + r.secret());
 
-                System.out.println("Created " + realmRoot + ":" + realmSecret);
-
-                One.append("This is a test realm").to(realmRoot).in(client);
-                Object bob = One.append("bob").to(realmRoot).atAddress("./bob")
-                        .in(client);
+                One.append("This is a test realm").to(r.root()).in(r.client());
+                Object bob = One.append("bob").to(r.root()).atAddress("./bob")
+                        .in(r.client());
                  
                 One.append(
                         One.reference("https://u1.linnk.it/zednuw/types/customer"))
                                        // ^-- replace with your customer type
-                        .to(bob).in(client);
+                        .to(bob).in(r.client());
 
-                One.shutdown(client).and(new ShutdownCallback() {
+                One.shutdown(r.client()).and(new ShutdownCallback() {
 
                     @Override
                     public void onSuccessfullyShutdown() {
@@ -42,8 +40,11 @@ public class L_GettingStarted_SelectCreateData {
                         throw new RuntimeException(arg0);
                     }
                 });
-
             }
+            
+           
+
+
         });
 
     }

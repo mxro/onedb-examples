@@ -5,7 +5,8 @@ import one.common.One;
 import one.core.domain.OneClient;
 import one.core.dsl.callbacks.ShutdownCallback;
 import one.core.dsl.callbacks.When;
-import one.core.nodes.OneNode;
+import one.core.dsl.callbacks.results.WithCommittedResult;
+import one.core.dsl.callbacks.results.WithRealmCreatedResult;
 import one.core.nodes.OneValue;
 
 public class B_AppendNode {
@@ -15,30 +16,32 @@ public class B_AppendNode {
 
 		One.createRealm("foo").and(new When.RealmCreated() {
 
-			@Override
-			public void thenDo(OneClient client, OneNode rootNode,
-					String secret, String partnerSecret) {
-				System.out.println("Realm has been created:");
-				System.out.println("  Root: " + rootNode); 
-				System.out.println("  Secret: " + secret);
+		    @Override
+            public void thenDo(WithRealmCreatedResult cr) {
+		        System.out.println("Realm has been created:");
+                System.out.println("  Root: " + cr.root()); 
+                System.out.println("  Secret: " + cr.secret());
 
-				String appendedObject = One.append("text").to(rootNode)
-						.in(client);
-				System.out.println("Appended: "+appendedObject); // Appended: text
-				
-				OneValue<Integer> appendedValue = One.append(120).to(rootNode)
-						.atAddress("./number").in(client);
-				System.out.println("Appended: "+appendedValue); // Appended: One.value(120).at(...)
-				
-				client.one().commit(client).and(new When.Committed() {
-					
-					@Override
-					public void thenDo(OneClient client) {
-						shutdown(client);
-					}
-				});
-				
-			}
+                String appendedObject = One.append("text").to(cr.root())
+                        .in(cr.client());
+                System.out.println("Appended: "+appendedObject); // Appended: text
+                
+                OneValue<Integer> appendedValue = One.append(120).to(cr.root())
+                        .atAddress("./number").in(cr.client());
+                System.out.println("Appended: "+appendedValue); // Appended: One.value(120).at(...)
+                
+                cr.client().one().commit(cr.client()).and(new When.Committed() {
+                    
+                   
+
+                    @Override
+                    public void thenDo(WithCommittedResult _cr) {
+                        shutdown(_cr.client());
+                    }
+                });
+            }
+		    
+			
 
 			private void shutdown(OneClient arg0) {
 				One.shutdown(arg0).and(new ShutdownCallback() {
@@ -54,6 +57,8 @@ public class B_AppendNode {
 					}
 				});
 			}
+
+            
 
 		});
 	}

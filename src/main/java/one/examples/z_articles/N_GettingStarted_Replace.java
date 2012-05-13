@@ -5,6 +5,7 @@ import one.common.One;
 import one.core.domain.OneClient;
 import one.core.dsl.callbacks.ShutdownCallback;
 import one.core.dsl.callbacks.When;
+import one.core.dsl.callbacks.results.WithRealmCreatedResult;
 import one.core.nodes.OneNode;
 
 public class N_GettingStarted_Replace {
@@ -19,9 +20,11 @@ public class N_GettingStarted_Replace {
         One.createRealm("update").and(new When.RealmCreated() {
 
             @Override
-            public void thenDo(OneClient client, OneNode realmRoot,
-                    String secret, String partnerSecret) {
+            public void thenDo(WithRealmCreatedResult r) {
 
+                OneClient client = r.client();
+                OneNode realmRoot = r.root();
+                
                 // node with external address
                 String phase1 = "phase1";
                 One.append(phase1).to(realmRoot).in(client);
@@ -51,8 +54,11 @@ public class N_GettingStarted_Replace {
                         System.out.println("all uploaded");
                     }
                 });
-
             }
+            
+            
+
+            
         });
     }
 

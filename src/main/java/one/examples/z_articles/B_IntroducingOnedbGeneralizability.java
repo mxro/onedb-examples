@@ -6,7 +6,7 @@ import one.client.jre.OneJre;
 import one.common.One;
 import one.core.domain.OneClient;
 import one.core.dsl.callbacks.When;
-import one.core.nodes.OneNode;
+import one.core.dsl.callbacks.results.WithRealmCreatedResult;
 
 public class B_IntroducingOnedbGeneralizability {
 
@@ -20,18 +20,23 @@ public class B_IntroducingOnedbGeneralizability {
         One.createRealm("nodes").and(new When.RealmCreated() {
 
             @Override
-            public void thenDo(OneClient client, OneNode root, String secret,
-                    String partnerSecret) {
+            public void thenDo(WithRealmCreatedResult r) {
+                OneClient client = r.client();
+                
                 String bar = "bar";
                 Integer meaning = 42;
                 Person p = new Person();
                 
-                One.append(bar).to(root).in(client);
+                One.append(bar).to(r.root()).in(client);
                 One.append(meaning).to(bar).in(client);
                 One.append(p).to(bar).in(client);
                 
-                System.out.println("Created " + root + ":" + secret);
+                System.out.println("Created " + r.root() + ":" + r.secret());
             }
+            
+           
+
+           
         });
     }
 }

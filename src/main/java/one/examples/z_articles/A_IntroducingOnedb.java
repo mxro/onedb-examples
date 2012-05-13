@@ -2,9 +2,8 @@ package one.examples.z_articles;
 
 import one.client.jre.OneJre;
 import one.common.One;
-import one.core.domain.OneClient;
 import one.core.dsl.callbacks.When;
-import one.core.nodes.OneNode;
+import one.core.dsl.callbacks.results.WithRealmCreatedResult;
 
 public class A_IntroducingOnedb {
 
@@ -13,11 +12,10 @@ public class A_IntroducingOnedb {
         One.createRealm("foo").and(new When.RealmCreated() {
 
             @Override
-            public void thenDo(OneClient client, OneNode root, String secret,
-                    String partnerSecret) {
-                One.append("bar").to(root).in(client);
+            public void thenDo(WithRealmCreatedResult r) {
+                One.append("bar").to(r.root()).in(r.client());
 
-                System.out.println("Created " + root + ":" + secret);
+                System.out.println("Created " + r.root() + ":" + r.secret());
             }
         });
     }

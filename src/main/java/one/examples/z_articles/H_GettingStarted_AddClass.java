@@ -4,13 +4,12 @@ import java.io.Serializable;
 
 import one.client.jre.OneJre;
 import one.common.One;
-import one.core.domain.OneClient;
 import one.core.dsl.callbacks.ShutdownCallback;
 import one.core.dsl.callbacks.When;
-import one.core.nodes.OneNode;
+import one.core.dsl.callbacks.results.WithRealmCreatedResult;
 
 public class H_GettingStarted_AddClass {
-    
+
     public static class Customer implements Serializable {
 
         private static final long serialVersionUID = 1L;
@@ -25,17 +24,16 @@ public class H_GettingStarted_AddClass {
         One.createRealm("ops").and(new When.RealmCreated() {
 
             @Override
-            public void thenDo(OneClient client, OneNode realmRoot,
-                    String accessSecret, String partnerSecret) {
+            public void thenDo(WithRealmCreatedResult r) {
                 Customer bob = new Customer();
                 bob.name = "Bob";
                 bob.address = "26 Short Av";
 
-                One.append(bob).to(realmRoot).in(client);
+                One.append(bob).to(r.root()).in(r.client());
 
-                System.out.println("Created " + realmRoot + ":" + accessSecret);
+                System.out.println("Created " + r.root() + ":" + r.secret());
 
-                One.shutdown(client).and(new ShutdownCallback() {
+                One.shutdown(r.client()).and(new ShutdownCallback() {
 
                     @Override
                     public void onSuccessfullyShutdown() {
@@ -48,7 +46,8 @@ public class H_GettingStarted_AddClass {
                     }
                 });
             }
+
         });
     }
-    
+
 }

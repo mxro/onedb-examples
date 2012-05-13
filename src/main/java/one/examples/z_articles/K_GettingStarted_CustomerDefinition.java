@@ -5,7 +5,7 @@ import one.common.One;
 import one.core.domain.OneClient;
 import one.core.dsl.callbacks.ShutdownCallback;
 import one.core.dsl.callbacks.When;
-import one.core.nodes.OneNode;
+import one.core.dsl.callbacks.results.WithRealmCreatedResult;
 
 public class K_GettingStarted_CustomerDefinition {
     
@@ -15,10 +15,9 @@ public class K_GettingStarted_CustomerDefinition {
         One.createRealm("bob").and(new When.RealmCreated() {
 
             @Override
-            public void thenDo(OneClient client, OneNode realmRoot,
-                    String accessSecret, String partnerSecret) {
-
-                System.out.println("Created " + realmRoot + ":" + accessSecret);
+            public void thenDo(WithRealmCreatedResult r) {
+                
+                System.out.println("Created " + r.root() + ":" + r.secret());
 
                 // -- reference types
                 Object addressType = One
@@ -33,7 +32,8 @@ public class K_GettingStarted_CustomerDefinition {
                                                                                  // yours!
 
                 // -- build data
-                Object bob = realmRoot;
+                OneClient client = r.client();
+                Object bob = r.root();
                 One.append(customerType).to(bob).in(client);
                 One.append("Bob").to(bob).in(client);
 
@@ -56,6 +56,10 @@ public class K_GettingStarted_CustomerDefinition {
                     }
                 });
             }
+            
+           
+
+           
         });
     }
     

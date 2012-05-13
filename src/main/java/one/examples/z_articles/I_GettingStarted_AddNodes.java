@@ -5,20 +5,19 @@ import one.common.One;
 import one.core.domain.OneClient;
 import one.core.dsl.callbacks.ShutdownCallback;
 import one.core.dsl.callbacks.When;
-import one.core.nodes.OneNode;
+import one.core.dsl.callbacks.results.WithRealmCreatedResult;
 
 public class I_GettingStarted_AddNodes {
-    
+
     public static void main(String[] args) {
         OneJre.init("[Your API Key here]");
 
         One.createRealm("ops").and(new When.RealmCreated() {
 
             @Override
-            public void thenDo(OneClient client, OneNode realmRoot,
-                    String accessSecret, String partnerSecret) {
-
-                Object bob = realmRoot;
+            public void thenDo(WithRealmCreatedResult r) {
+                OneClient client = r.client();
+                Object bob = r.root();
 
                 One.append("Bob").to(bob).in(client);
 
@@ -28,7 +27,7 @@ public class I_GettingStarted_AddNodes {
 
                 One.append("a Customer").to(bob).in(client);
 
-                System.out.println("Created " + realmRoot + ":" + accessSecret);
+                System.out.println("Created " + r.root() + ":" + r.secret());
 
                 One.shutdown(client).and(new ShutdownCallback() {
 
@@ -43,7 +42,8 @@ public class I_GettingStarted_AddNodes {
                     }
                 });
             }
+
         });
     }
-    
+
 }

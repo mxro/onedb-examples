@@ -2,34 +2,32 @@ package one.examples.z_articles;
 
 import one.client.jre.OneJre;
 import one.common.One;
-import one.core.domain.OneClient;
 import one.core.dsl.callbacks.ShutdownCallback;
 import one.core.dsl.callbacks.When;
-import one.core.nodes.OneNode;
+import one.core.dsl.callbacks.results.WithRealmCreatedResult;
 
 public class J_GettingStarted_CustomerTypes {
-    
+
     public static void main(String[] args) {
         OneJre.init("[Your API Key here]");
 
         One.createRealm("types").and(new When.RealmCreated() {
 
             @Override
-            public void thenDo(OneClient client, OneNode realmRoot,
-                    String accessSecret, String partnerSecret) {
+            public void thenDo(WithRealmCreatedResult r) {
+                Object typesRoot = r.root();
 
-                System.out.println("Created " + realmRoot + ":" + accessSecret);
+                Object addressType = One.append("an Address").to(typesRoot)
+                        .atAddress("./address").in(r.client());
 
-                Object addressType = One.append("an Address").to(realmRoot)
-                        .atAddress("./address").in(client);
-
-                Object customerType = One.append("a Customer").to(realmRoot)
-                        .atAddress("./customer").in(client);
+                Object customerType = One.append("a Customer").to(typesRoot)
+                        .atAddress("./customer").in(r.client());
 
                 System.out.println("Address type: " + addressType);
                 System.out.println("Customer type: " + customerType);
+                System.out.println("Types realm " + r.root() + ":" + r.secret());
 
-                One.shutdown(client).and(new ShutdownCallback() {
+                One.shutdown(r.client()).and(new ShutdownCallback() {
 
                     @Override
                     public void onSuccessfullyShutdown() {
@@ -42,7 +40,8 @@ public class J_GettingStarted_CustomerTypes {
                     }
                 });
             }
+
         });
     }
-    
+
 }
