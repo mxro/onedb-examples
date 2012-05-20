@@ -2,7 +2,6 @@ package one.examples.z_articles;
 
 import one.client.jre.OneJre;
 import one.common.One;
-import one.core.dsl.callbacks.ShutdownCallback;
 import one.core.dsl.callbacks.When;
 import one.core.dsl.callbacks.results.WithChildrenSelectedResult;
 import one.core.dsl.callbacks.results.WithLoadResult;
@@ -71,18 +70,15 @@ public class M_GettingStarted_SelectQueryData {
 
                                 });
 
-                        One.shutdown(lr.client()).and(new ShutdownCallback() {
-
+                        One.shutdown(lr.client()).and(new When.Shutdown() {
+                            
                             @Override
-                            public void onSuccessfullyShutdown() {
+                            public void thenDo() {
                                 System.out.println("All queries completed.");
                             }
-
-                            @Override
-                            public void onFailure(Throwable arg0) {
-                                throw new RuntimeException(arg0);
-                            }
                         });
+                        
+                        
 
                     }
                 });

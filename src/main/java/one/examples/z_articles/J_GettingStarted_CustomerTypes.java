@@ -2,7 +2,7 @@ package one.examples.z_articles;
 
 import one.client.jre.OneJre;
 import one.common.One;
-import one.core.dsl.callbacks.ShutdownCallback;
+import one.core.domain.OneClient;
 import one.core.dsl.callbacks.When;
 import one.core.dsl.callbacks.results.WithRealmCreatedResult;
 
@@ -27,21 +27,21 @@ public class J_GettingStarted_CustomerTypes {
                 System.out.println("Customer type: " + customerType);
                 System.out.println("Types realm " + r.root() + ":" + r.secret());
 
-                One.shutdown(r.client()).and(new ShutdownCallback() {
+                shutdown(r.client());
+            }
+
+            private void shutdown(OneClient client) {
+                One.shutdown(client).and(new When.Shutdown() {
 
                     @Override
-                    public void onSuccessfullyShutdown() {
-                        System.out.println("Types created successfully.");
-                    }
-
-                    @Override
-                    public void onFailure(Throwable arg0) {
-                        throw new RuntimeException(arg0);
+                    public void thenDo() {
+                        System.out.println("Client successfully shut down.");
                     }
                 });
             }
 
         });
+
     }
 
 }

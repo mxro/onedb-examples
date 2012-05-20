@@ -2,7 +2,7 @@ package one.examples.z_articles;
 
 import one.client.jre.OneJre;
 import one.common.One;
-import one.core.dsl.callbacks.ShutdownCallback;
+import one.core.domain.OneClient;
 import one.core.dsl.callbacks.When;
 import one.core.dsl.callbacks.results.WithRealmCreatedResult;
 
@@ -19,18 +19,16 @@ public class F_GettingStarted_ExploreOnedb {
                 System.out.println("realmRoot: " + r.root());
                 System.out.println("secret: " + r.secret());
 
-                One.shutdown(r.client()).and(new ShutdownCallback() {
+                shutdown(r.client());
+            }
+            
+            private void shutdown(OneClient client) {
+                One.shutdown(client).and(new When.Shutdown() {
 
                     @Override
-                    public void onSuccessfullyShutdown() {
-                        System.out.println("Session is shut down.");
+                    public void thenDo() {
+                        System.out.println("Client successfully shut down.");
                     }
-
-                    @Override
-                    public void onFailure(Throwable arg0) {
-                        throw new RuntimeException(arg0);
-                    }
-
                 });
             }
 

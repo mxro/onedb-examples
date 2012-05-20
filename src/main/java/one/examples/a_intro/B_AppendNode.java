@@ -3,7 +3,6 @@ package one.examples.a_intro;
 import one.client.jre.OneJre;
 import one.common.One;
 import one.core.domain.OneClient;
-import one.core.dsl.callbacks.ShutdownCallback;
 import one.core.dsl.callbacks.When;
 import one.core.dsl.callbacks.results.WithCommittedResult;
 import one.core.dsl.callbacks.results.WithRealmCreatedResult;
@@ -43,20 +42,15 @@ public class B_AppendNode {
 		    
 			
 
-			private void shutdown(OneClient arg0) {
-				One.shutdown(arg0).and(new ShutdownCallback() {
+		    private void shutdown(OneClient client) {
+                One.shutdown(client).and(new When.Shutdown() {
 
-					@Override
-					public void onSuccessfullyShutdown() {
-						System.out.println("Client successfully shut down.");
-					}
-
-					@Override
-					public void onFailure(Throwable arg0) {
-						throw new RuntimeException(arg0);
-					}
-				});
-			}
+                    @Override
+                    public void thenDo() {
+                        System.out.println("Client successfully shut down.");
+                    }
+                });
+            }
 
             
 

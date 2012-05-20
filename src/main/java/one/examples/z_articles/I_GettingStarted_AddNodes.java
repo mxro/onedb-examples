@@ -3,7 +3,6 @@ package one.examples.z_articles;
 import one.client.jre.OneJre;
 import one.common.One;
 import one.core.domain.OneClient;
-import one.core.dsl.callbacks.ShutdownCallback;
 import one.core.dsl.callbacks.When;
 import one.core.dsl.callbacks.results.WithRealmCreatedResult;
 
@@ -29,16 +28,15 @@ public class I_GettingStarted_AddNodes {
 
                 System.out.println("Created " + r.root() + ":" + r.secret());
 
-                One.shutdown(client).and(new ShutdownCallback() {
+                shutdown(client);
+            }
+            
+            private void shutdown(OneClient client) {
+                One.shutdown(client).and(new When.Shutdown() {
 
                     @Override
-                    public void onSuccessfullyShutdown() {
-                        // all ok
-                    }
-
-                    @Override
-                    public void onFailure(Throwable arg0) {
-                        throw new RuntimeException(arg0);
+                    public void thenDo() {
+                        System.out.println("Client successfully shut down.");
                     }
                 });
             }

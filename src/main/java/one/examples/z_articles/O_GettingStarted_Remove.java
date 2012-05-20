@@ -3,7 +3,7 @@ package one.examples.z_articles;
 import one.client.jre.OneJre;
 import one.common.One;
 import one.core.domain.OneClient;
-import one.core.dsl.callbacks.ShutdownCallback;
+import one.core.dsl.callbacks.When;
 import one.core.dsl.callbacks.WhenRealmCreated;
 import one.core.dsl.callbacks.results.WithRealmCreatedResult;
 import one.core.nodes.OneNode;
@@ -37,14 +37,15 @@ public class O_GettingStarted_Remove {
                 One.append(toBeKeptNode).to(anotherNode).in(client);
                 One.remove(toBeKeptNode).fromNode(anotherNode).in(client);
 
-                One.shutdown(client).and(new ShutdownCallback() {
-
+                One.shutdown(client).and(new When.Shutdown() {
+                    
                     @Override
-                    public void onSuccessfullyShutdown() {
+                    public void thenDo() {
                         System.out.println("all uploaded for " + r.root()
                                 + ":" + r.secret());
                     }
                 });
+               
             }
         });
     }

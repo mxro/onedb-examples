@@ -3,7 +3,6 @@ package one.examples.z_articles;
 import one.client.jre.OneJre;
 import one.common.One;
 import one.core.domain.OneClient;
-import one.core.dsl.callbacks.ShutdownCallback;
 import one.core.dsl.callbacks.When;
 import one.core.dsl.callbacks.results.WithCommittedResult;
 import one.core.dsl.callbacks.results.WithRealmCreatedResult;
@@ -51,17 +50,19 @@ public class Nb_GettingStarted_Replace_With_Clear_Versions {
                                         System.out.println("Versions cleared");
 
                                         One.shutdown(client).and(
-                                                new ShutdownCallback() {
-
+                                                new When.Shutdown() {
+                                                    
                                                     @Override
-                                                    public void onSuccessfullyShutdown() {
+                                                    public void thenDo() {
                                                         System.out
-                                                                .println("Client closed for "
-                                                                        + r.root()
-                                                                        + ":"
-                                                                        + r.secret());
+                                                        .println("Client closed for "
+                                                                + r.root()
+                                                                + ":"
+                                                                + r.secret());
                                                     }
                                                 });
+                                                
+                                                
                                     }
                                 });
                     }

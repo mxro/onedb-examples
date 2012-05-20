@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import one.client.jre.OneJre;
 import one.common.One;
-import one.core.dsl.callbacks.ShutdownCallback;
+import one.core.domain.OneClient;
 import one.core.dsl.callbacks.When;
 import one.core.dsl.callbacks.results.WithRealmCreatedResult;
 
@@ -33,16 +33,15 @@ public class H_GettingStarted_AddClass {
 
                 System.out.println("Created " + r.root() + ":" + r.secret());
 
-                One.shutdown(r.client()).and(new ShutdownCallback() {
+                shutdown(r.client());
+            }
+
+            private void shutdown(OneClient client) {
+                One.shutdown(client).and(new When.Shutdown() {
 
                     @Override
-                    public void onSuccessfullyShutdown() {
-                        // all ok
-                    }
-
-                    @Override
-                    public void onFailure(Throwable arg0) {
-                        throw new RuntimeException(arg0);
+                    public void thenDo() {
+                        System.out.println("Client successfully shut down.");
                     }
                 });
             }

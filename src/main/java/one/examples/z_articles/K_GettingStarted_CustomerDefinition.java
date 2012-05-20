@@ -3,7 +3,6 @@ package one.examples.z_articles;
 import one.client.jre.OneJre;
 import one.common.One;
 import one.core.domain.OneClient;
-import one.core.dsl.callbacks.ShutdownCallback;
 import one.core.dsl.callbacks.When;
 import one.core.dsl.callbacks.results.WithRealmCreatedResult;
 
@@ -43,18 +42,15 @@ public class K_GettingStarted_CustomerDefinition {
 
                 System.out.println("will upload data ...");
 
-                One.shutdown(client).and(new ShutdownCallback() {
+                One.shutdown(client).and(new When.Shutdown() {
 
                     @Override
-                    public void onSuccessfullyShutdown() {
+                    public void thenDo() {
                         System.out.println("... all data uploaded.");
                     }
-
-                    @Override
-                    public void onFailure(Throwable arg0) {
-                        throw new RuntimeException(arg0);
-                    }
                 });
+                
+               
             }
             
            

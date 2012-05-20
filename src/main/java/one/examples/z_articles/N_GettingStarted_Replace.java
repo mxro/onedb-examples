@@ -3,10 +3,10 @@ package one.examples.z_articles;
 import one.client.jre.OneJre;
 import one.common.One;
 import one.core.domain.OneClient;
-import one.core.dsl.callbacks.ShutdownCallback;
 import one.core.dsl.callbacks.When;
 import one.core.dsl.callbacks.results.WithRealmCreatedResult;
 import one.core.nodes.OneNode;
+import one.core.nodes.OneTypedReference;
 
 public class N_GettingStarted_Replace {
 
@@ -41,19 +41,23 @@ public class N_GettingStarted_Replace {
                         .with(One.newNode("phase2").at(phase1Node.getId()))
                         .in(client);
                 
-                for (String childId : One.selectFrom(realmRoot).allChildren()
+                for (OneTypedReference<Object> childId : One.selectFrom(realmRoot).allChildren()
                         .in(client)) {
                     System.out.println(One.dereference(One.reference(childId))
                             .in(client));
                 }
 
-                One.shutdown(client).and(new ShutdownCallback() {
-
+                
+               
+                One.shutdown(client).and(new When.Shutdown() {
+                    
                     @Override
-                    public void onSuccessfullyShutdown() {
+                    public void thenDo() {
                         System.out.println("all uploaded");
                     }
                 });
+                        
+                   
             }
             
             
