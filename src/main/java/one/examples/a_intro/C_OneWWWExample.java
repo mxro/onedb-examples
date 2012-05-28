@@ -9,7 +9,7 @@ import one.core.dsl.callbacks.results.WithRealmCreatedResult;
 import one.core.nodes.OneNode;
 
 /**
- * Annotated example for onedb website (http://www.onedb.de/)
+ * Annotated example to upload simple web page using onedb.
  * 
  * @author Max
  *
