@@ -73,8 +73,8 @@ public class VersatileDataRepresentation_NodeList {
 		// instantiate another local client context
 		final OneClient c = dsl.createClient();
 
-		// select from the seed node create in the previous step all nodes,
-		// which contain a link to the tyoe node `aFriend`.
+		// select from the seed node created in the previous step all nodes,
+		// which contain a link to the type node `aFriend`.
 		dsl.selectFrom(dsl.reference(friendsNodeUri)).theChildren()
 				.withSecret(friendsNodeSecret)
 				.linkingTo(dsl.reference(friendType)).in(c)
