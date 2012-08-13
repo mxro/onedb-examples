@@ -16,29 +16,32 @@ import one.core.nodes.OneTypedReference;
 public class VersatileDataRepresentation_JavaList {
 
 	public static void main(final String[] args) {
-
 		createListAsJavaList();
-
 	}
 
 	public static void createListAsJavaList() {
+		// initialize engine
 		final CoreDsl dsl = OneJre.init();
 
+		// create a client to hold local data replication
 		final OneClient c = dsl.createClient();
 
+		// create a new 'seed' data node in the cloud
 		dsl.seed(c, new WhenSeeded() {
 
 			@Override
 			public void thenDo(final WithSeedResult sr) {
 
+				// create a plain Java list
 				final List<String> myFriends = new LinkedList<String>();
 				myFriends.add("Peter");
 				myFriends.add("Paul");
 				myFriends.add("Petra");
 
-				// any Serializable node can be appended - also a LinkedList
+				// append the list to the created 'seed' data node
 				dsl.append(myFriends).to(sr.seedNode()).in(c);
 
+				// finalize local client context & upload all data
 				dsl.shutdown(c).and(new WhenShutdown() {
 
 					@Override
@@ -59,10 +62,14 @@ public class VersatileDataRepresentation_JavaList {
 	@SuppressWarnings("rawtypes")
 	private static void loadListAsJavaList(final String friendsNodeUri,
 			final String friendNodeSecret) {
+		// initialize engine for testing to load data
 		final CoreDsl dsl = OneJre.init();
 
+		// create client for testing to load data
 		final OneClient c = dsl.createClient();
 
+		// select all nodes from the previously created seed node, which are of
+		// the type LinkedList.
 		dsl.selectFrom(dsl.reference(friendsNodeUri)).theChildren()
 				.withSecret(friendNodeSecret).ofType(LinkedList.class).in(c)
 				.and(new WhenChildrenSelected<OneTypedReference<LinkedList>>() {
@@ -73,6 +80,9 @@ public class VersatileDataRepresentation_JavaList {
 
 						assert cr.children().size() == 1;
 
+						// select by default returns a list of references, the
+						// reference must be resolved in order to access the
+						// LinkedList
 						final List<?> myFriends = dsl.dereference(
 								cr.children().get(0)).in(c);
 
