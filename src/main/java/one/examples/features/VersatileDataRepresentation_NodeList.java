@@ -30,12 +30,14 @@ public class VersatileDataRepresentation_NodeList {
 			@Override
 			public void thenDo(final WithSeedResult sr) {
 
-				// create nodes for friends and attach to new seed node
-				final Object peter = dsl.append("Peter").to(sr.seedNode())
-						.in(c);
-				final Object paul = dsl.append("Paul").to(sr.seedNode()).in(c);
-				final Object petra = dsl.append("Petra").to(sr.seedNode())
-						.in(c);
+				// designate newly created seed node as node to hold friends
+				// list
+				final OneNode friends = sr.seedNode();
+
+				// create nodes for friends and attach to friends node
+				final Object peter = dsl.append("Peter").to(friends).in(c);
+				final Object paul = dsl.append("Paul").to(friends).in(c);
+				final Object petra = dsl.append("Petra").to(friends).in(c);
 
 				// define a 'type' to distinguish `friend` nodes from other
 				// nodes
@@ -47,14 +49,15 @@ public class VersatileDataRepresentation_NodeList {
 				dsl.append(friendType).to(paul).in(c);
 				dsl.append(friendType).to(petra).in(c);
 
-				System.out.println("Friend data written. Wait for load ...");
-
 				// finalize local client context & commit all changes
 				dsl.shutdown(c).and(new WhenShutdown() {
 
 					@Override
 					public void thenDo() {
-						loadListAsNodeList(friendType, sr.seedNode().getId(),
+						System.out
+								.println("Friend data written. Wait for load ...");
+
+						loadListAsNodeList(friendType, friends.getId(),
 								sr.accessToken());
 					}
 				});
