@@ -7,11 +7,9 @@ import one.client.jre.OneJre;
 import one.core.domain.OneClient;
 import one.core.dsl.CoreDsl;
 import one.core.dsl.callbacks.WhenChildrenSelected;
-import one.core.dsl.callbacks.WhenLoaded;
 import one.core.dsl.callbacks.WhenSeeded;
 import one.core.dsl.callbacks.WhenShutdown;
 import one.core.dsl.callbacks.results.WithChildrenSelectedResult;
-import one.core.dsl.callbacks.results.WithLoadResult;
 import one.core.dsl.callbacks.results.WithSeedResult;
 import one.core.nodes.OneTypedReference;
 
@@ -38,12 +36,16 @@ public class VersatileDataRepresentation_JavaList {
 				myFriends.add("Paul");
 				myFriends.add("Petra");
 
+				// any Serializable node can be appended - also a LinkedList
 				dsl.append(myFriends).to(sr.seedNode()).in(c);
 
 				dsl.shutdown(c).and(new WhenShutdown() {
 
 					@Override
 					public void thenDo() {
+
+						System.out
+								.println("Friends data written. Wait for load ...");
 						loadListAsJavaList(sr.seedNode().getId(),
 								sr.accessToken());
 					}
@@ -54,44 +56,35 @@ public class VersatileDataRepresentation_JavaList {
 		});
 	}
 
-	private static void loadListAsJavaList(final String dataNode,
-			final String accessToken) {
+	@SuppressWarnings("rawtypes")
+	private static void loadListAsJavaList(final String friendsNodeUri,
+			final String friendNodeSecret) {
 		final CoreDsl dsl = OneJre.init();
 
 		final OneClient c = dsl.createClient();
 
-		dsl.load(dataNode).withSecret(accessToken).and(new WhenLoaded() {
+		dsl.selectFrom(dsl.reference(friendsNodeUri)).theChildren()
+				.withSecret(friendNodeSecret).ofType(LinkedList.class).in(c)
+				.and(new WhenChildrenSelected<OneTypedReference<LinkedList>>() {
 
-			@SuppressWarnings("rawtypes")
-			@Override
-			public void thenDo(final WithLoadResult<Object> lr) {
+					@Override
+					public void thenDo(
+							final WithChildrenSelectedResult<OneTypedReference<LinkedList>> cr) {
 
-				dsl.selectFrom(lr.loadedNode())
-						.theChildren()
-						.ofType(LinkedList.class)
-						.in(c)
-						.and(new WhenChildrenSelected<OneTypedReference<LinkedList>>() {
+						assert cr.children().size() == 1;
 
-							@Override
-							public void thenDo(
-									final WithChildrenSelectedResult<OneTypedReference<LinkedList>> cr) {
+						final List<?> myFriends = dsl.dereference(
+								cr.children().get(0)).in(c);
 
-								assert cr.children().size() == 1;
+						System.out.println("My friends in a Java List: "
+								+ myFriends);
+						System.out.println("Stored in: " + friendsNodeUri);
 
-								final List<?> myFriends = dsl.dereference(
-										cr.children().get(0)).in(c);
+						dsl.shutdown(c).and(WhenShutdown.DO_NOTHING);
 
-								System.out
-										.println("My friends in a Java List: "
-												+ myFriends);
+					}
+				});
 
-								dsl.shutdown(c).and(WhenShutdown.DO_NOTHING);
-
-							}
-						});
-
-			}
-		});
 	}
 
 }
