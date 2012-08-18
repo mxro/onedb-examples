@@ -29,7 +29,7 @@ public class ServerSideMarkdownRendering {
 			@Override
 			public void thenDo(final WithSeedResult sr) {
 
-				final String markdownText = "# Hello, World\n\nof **markdown**!";
+				final String markdownText = "# Hello, World\n\nof **markdown**!<button>Test</button>";
 
 				final OneValue<String> markdownNode = dsl.append(markdownText)
 						.to(sr.seedNode()).atAddress("./md").in(client);
@@ -48,11 +48,12 @@ public class ServerSideMarkdownRendering {
 						+ markdownNode.getId().replaceAll("https", "http")
 						+ ".value.md");
 
+				System.out.println("Secret: " + sr.accessToken());
+
 				dsl.shutdown(client).and(WhenShutdown.DO_NOTHING);
 
 			}
 		});
 
 	}
-
 }

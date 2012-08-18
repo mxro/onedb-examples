@@ -31,6 +31,8 @@ public class RapidDataUploadFromAnywhere {
 						.append("Hello, this data is in the cloud!")
 						.to(sr.seedNode()).in(client);
 
+				dsl.append(112).to(sr.seedNode()).in(client);
+
 				System.out.println("Data uploaded");
 
 				final String httpLink = dsl.reference((Object) data).in(client)
